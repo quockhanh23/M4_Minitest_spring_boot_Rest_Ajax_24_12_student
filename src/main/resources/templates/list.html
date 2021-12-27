@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+</head>
+<body>
+<h2><a style="color: #0f3b62;" href="/student/">List</a></h2>
+
+<form>
+    <label><input id="inputSearch" name="search" placeholder="search by name"></label>
+    <button>Search</button>
+</form>
+<button><a th:href="@{/student/sort}">Score Desc</a></button>
+<button><a th:href="@{/student/sort2}">Score Asc</a></button>
+<button><a th:href="@{/student/sort3}">Score > 8</a></button>
+<button><a th:href="@{/student/sort4}">Score Desc limit 3</a></button>
+<h2 th:text="${cookie.value}"></h2>
+<div>
+    <table cellpadding="1" border="1" width="100%">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Score</th>
+            <th>Class</th>
+            <th style="color: rebeccapurple">Edit</th>
+        </tr>
+        <tr th:each="st : ${list}">
+            <td th:text="${st.id}"></td>
+            <td th:text="${st.name}"></td>
+            <td th:text="${st.age}"></td>
+            <td th:text="${st.score}"></td>
+            <td th:if="${st.classes}" th:text="${st.classes.name}"></td>
+            <td th:unless="${st.classes}"></td>
+            <td align="center">
+                <button><a th:href="@{/student/edit-student/__${st.getId()}__}">Edit</a></button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
