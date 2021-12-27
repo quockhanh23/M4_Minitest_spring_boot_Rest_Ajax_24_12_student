@@ -41,7 +41,7 @@ public class StudentRestController {
         Optional<Student> student1 = studentService.findById(id);
         student.setId(student1.get().getId());
         studentService.save(student);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(student1.get(),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -54,4 +54,3 @@ public class StudentRestController {
         return new ResponseEntity<>(student.get(), HttpStatus.NO_CONTENT);
     }
 }
-
