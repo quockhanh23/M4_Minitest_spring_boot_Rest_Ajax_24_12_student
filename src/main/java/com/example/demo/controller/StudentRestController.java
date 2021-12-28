@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,9 +44,12 @@ public class StudentRestController {
     }
 
     @GetMapping("/search/{name}")
-    public ResponseEntity<Iterable<Student>> findStudentByName(@PathVariable String name) {
-        Iterable<Student> students;
+    public ResponseEntity<List<Student>> findStudentByName(@PathVariable String name) {
+        List<Student> students;
         students = studentService.findByNameContaining(name);
+        if (students.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 

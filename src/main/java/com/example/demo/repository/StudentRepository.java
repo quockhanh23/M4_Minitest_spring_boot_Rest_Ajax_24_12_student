@@ -7,13 +7,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
    Iterable<Student> findAllByOrderByScoreDesc();
 
    Iterable<Student> findAllByOrderByScoreAsc();
 
-   Iterable<Student> findByNameContaining(String name);
+   List<Student> findByNameContaining(String name);
 
    Iterable<Student> findByName(String name);
 

@@ -6,6 +6,7 @@ import com.example.demo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,7 +45,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Iterable<Student> findByNameContaining(String name) {
+    public List<Student> findByNameContaining(String name) {
         return studentRepository.findByNameContaining(name);
     }
 
