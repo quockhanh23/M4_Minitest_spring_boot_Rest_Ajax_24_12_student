@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>List</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function getAllStudent() {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/students",
+                success: function (data) {
+                    console.log(data)
+                    display(data)
+                }
+            })
+        }
+
+        function display(array) {
+            let res = "";
+            for (let i = 0; i < array.length; i++) {
+                res += array[i].name + " " + array[i].id + "<br>"
+            }
+            document.getElementById('div1').innerHTML = res
+        }
+
+        function showFormAdd() {
+            let form =
+                '<input type="text" id="name">\n' +
+                '<input type="text" id="score">\n' +
+                '<input type="text" id="age">\n' +
+                '<input type="text" id="classes">' + '<button onclick="save()">Save</button>';
+            document.getElementById('div1').innerHTML = form;
+        }
+
+        function save() {
+            let name = document.getElementById("name").value;
+            let score = document.getElementById("score").value;
+            let age = document.getElementById("age").value;
+            let classes = document.getElementById("classes").value;
+            let data = {
+                name: name,
+                score: score,
+                age: age,
+                classes: {
+                    id: classes
+                }
+            }
+            console.log(data);
+            $.ajax({
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: 'PORT',
+                url: "http://localhost:8080/api/students",
+                data: JSON.stringify(data),
+                success: alert("Done"),
+                error: function (error) {
+                    console.log(error)
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+
+<button onclick="getAllStudent()">show all student</button>
+<button onclick="showFormAdd()">add new student</button>
+
+<div id="div1"></div>
+</body>
+</html>

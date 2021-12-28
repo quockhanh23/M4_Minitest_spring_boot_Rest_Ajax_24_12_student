@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/students")
 public class StudentRestController {
     @Autowired
@@ -33,7 +34,7 @@ public class StudentRestController {
     @PostMapping
     public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
         studentService.save(student);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(student,HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
