@@ -10,4 +10,5 @@ public interface StudentService extends GeneralService<Student> {
     Iterable<Student> findByName(String name);
     Iterable<Student> findScore();
     Iterable<Student> findAllByScoreLimit3();
+    Iterable<Student> findAllByAgeDESC();
 }

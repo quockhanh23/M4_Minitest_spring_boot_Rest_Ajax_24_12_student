@@ -19,7 +19,9 @@
         function display(array) {
             let res = "";
             for (let i = 0; i < array.length; i++) {
-                res += array[i].name + " " + array[i].id + "<br>"
+                res += "<br><span>" + array[i].name
+                    + "<button onclick='showFormEdit(" + array[i].id + ")'>edit</button></span>"
+                    + "<button onclick='deleteById(" + array[i].id + ")'>delete</button></span>";
             }
             document.getElementById('div1').innerHTML = res
         }
@@ -48,12 +50,12 @@
             }
             console.log(data);
             $.ajax({
-                headers:{
+                headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                type: 'PORT',
-                url: "http://localhost:8080/api/students",
+                type: 'POST',
+                url: "http://localhost:8080/api/students/",
                 data: JSON.stringify(data),
                 success: alert("Done"),
                 error: function (error) {
@@ -61,13 +63,101 @@
                 }
             })
         }
+
+        function showFormEdit(id) {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/students/" + id,
+                success: function (data) {
+                    document.getElementById("div1").innerHTML = '<input type="text" placeholder="name" id="name" value="' + data.name + '">\n' +
+                        '    <input type="text" placeholder="score" id="score" value="' + data.score + '">\n' +
+                        '    <input type="text" placeholder="age" id="age" value="' + data.age + '">\n' +
+                        '    <button onclick="saveEdit(' + data.id + ')">Save</button>'
+                }
+            })
+        }
+
+        function saveEdit(id) {
+            let student = {
+                name: document.getElementById("name").value,
+                score: document.getElementById("score").value,
+                age: document.getElementById("age").value,
+            }
+            console.log(student)
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                type: "PUT",
+                url: "http://localhost:8080/api/students/" + id,
+                data: JSON.stringify(student),
+                success: getAllStudent,
+                error: function (error) {
+                }
+            })
+        }
+
+        function showFormSearch() {
+            document.getElementById("div1").innerHTML = '<input type="text" id="key"><button onclick="search()">Search</button>'
+        }
+
+        function orderByAgeDesc() {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/students/orderByAgeDesc",
+                success: function (data) {
+                    let str = "";
+                    for (let i = 0; i < data.length; i++) {
+                        str += "<br><span>" + data[i].name + ": " + data[i].score + ":" + data[i].age
+                    }
+                    document.getElementById("div1").innerHTML = str;
+                }
+            })
+        }
+
+        function deleteById(id) {
+            if (confirm("Bạn có thật sự muốn xoá?")) {
+                $.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    type: "DELETE",
+                    url: "http://localhost:8080/api/students/" + id,
+                    success: getAllStudent,
+                    error: function (error) {
+                    }
+                });
+            }
+        }
+
+        function search() {
+            let key = document.getElementById("key").value;
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/students/search/" + key,
+                success: function (data) {
+                    let str = "";
+                    for (let i = 0; i < data.length; i++) {
+                        str += "<br><span>" + data[i].name + ": " + data[i].score + ":" + data[i].age
+                            + "<button onclick='showFormEdit(" + data[i].id + ")'>edit</button></span>"
+                    }
+                    document.getElementById("div1").innerHTML = str;
+                }
+            })
+            document.getElementById("div1").innerHTML = '<button onclick="showFormSearch()">Search</button>'
+        }
     </script>
 </head>
 <body>
 
 <button onclick="getAllStudent()">show all student</button>
 <button onclick="showFormAdd()">add new student</button>
-
+<button onclick="showFormSearch()">Search</button>
+<button onclick="orderByAgeDesc()">Order By Age</button>
 <div id="div1"></div>
+<div id="content">
+</div>
 </body>
 </html>

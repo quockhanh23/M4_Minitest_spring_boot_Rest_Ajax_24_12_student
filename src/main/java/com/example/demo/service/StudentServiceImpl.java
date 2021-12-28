@@ -62,6 +62,11 @@ public class StudentServiceImpl implements StudentService {
     public Iterable<Student> findAllByScoreLimit3() {
         return studentRepository.findAllByScoreLimit3();
     }
+
+    @Override
+    public Iterable<Student> findAllByAgeDESC() {
+        return studentRepository.findAllByAgeDESC();
+    }
 }
 
 

@@ -31,10 +31,28 @@ public class StudentRestController {
         return new ResponseEntity<>(student.get(), HttpStatus.OK);
     }
 
+    @GetMapping("/orderByAgeDesc")
+    public ResponseEntity<Iterable<Student>> findStudentSortByAge(String name) {
+        Iterable<Student> students;
+        if (name == null) {
+            students = studentService.findAllByAgeDESC();
+        } else {
+            students = studentService.findByNameContaining(name);
+        }
+        return new ResponseEntity<>(students, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<Iterable<Student>> findStudentByName(@PathVariable String name) {
+        Iterable<Student> students;
+        students = studentService.findByNameContaining(name);
+        return new ResponseEntity<>(students, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
         studentService.save(student);
-        return new ResponseEntity<>(student,HttpStatus.CREATED);
+        return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -42,14 +60,14 @@ public class StudentRestController {
         Optional<Student> student1 = studentService.findById(id);
         student.setId(student1.get().getId());
         studentService.save(student);
-        return new ResponseEntity<>(student1.get(),HttpStatus.OK);
+        return new ResponseEntity<>(student1.get(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
         Optional<Student> student = studentService.findById(id);
         if (!student.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(student.get(), HttpStatus.NOT_FOUND);
         }
         studentService.remove(id);
         return new ResponseEntity<>(student.get(), HttpStatus.NO_CONTENT);
